@@ -55,8 +55,23 @@
 
 ## Component Tree & Data Flow
 
+![Component Tree Diagram](https://github.com/DavydShmyhelskyi/React-lab4/blob/main/%D0%94%D1%96%D0%B0%D0%B3%D1%80%D0%B0%D0%BC%D0%B0%20%D0%B1%D0%B5%D0%B7%20%D0%BD%D0%B0%D0%B7%D0%B2%D0%B8.drawio.png)
 
-https://github.com/DavydShmyhelskyi/React-lab4/blob/main/ReactLab4.drawio%20(1).png
+- **App** — Composition Root, рендерить TodoList
+- **TodoList (Container)** — отримує todos, методи та стани з `useTodos`, керує search, pagination, edit
+- **AddTodoForm** — передає `onAdd` callback
+- **Search Input** — керує `searchTerm`
+- **Pagination Controls** — керують сторінкою та кількістю елементів
+- **TodoItem** — презентаційний компонент, children використовуються для редагування
+- **Data Flow:** props вниз, events вгору через callback-и до хуку
+
+---
+
+## Як запускати
+1. Клонувати репозиторій
+2. Встановити залежності:  
+```bash
+npm install
 
 ---
 ## Посилання на сайт
