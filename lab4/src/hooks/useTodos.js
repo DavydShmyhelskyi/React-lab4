@@ -5,21 +5,32 @@ export function useTodos() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // fetch todos
+  // нові стани
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [limitPerPage, setLimitPerPage] = useState(10);
+  const [totalTodos, setTotalTodos] = useState(0);
+
+  // фетч + пагінація
   useEffect(() => {
-    fetch("https://dummyjson.com/todos")
+    setIsLoading(true);
+    fetch(
+      `https://dummyjson.com/todos?limit=${limitPerPage}&skip=${
+        (currentPage - 1) * limitPerPage
+      }`
+    )
       .then((res) => res.json())
       .then((data) => {
         setTodos(data.todos);
+        setTotalTodos(data.total);
         setIsLoading(false);
       })
       .catch((err) => {
         setError(err.message);
         setIsLoading(false);
       });
-  }, []);
+  }, [currentPage, limitPerPage]);
 
-  // delete
   const deleteTodo = async (id) => {
     try {
       await fetch(`https://dummyjson.com/todos/${id}`, { method: "DELETE" });
@@ -29,7 +40,6 @@ export function useTodos() {
     }
   };
 
-  // edit checkbox
   const toggleTodo = async (id) => {
     try {
       const todo = todos.find((t) => t.id === id);
@@ -51,7 +61,6 @@ export function useTodos() {
     }
   };
 
-  // add
   const addTodo = async (text) => {
     try {
       const response = await fetch("https://dummyjson.com/todos/add", {
@@ -60,7 +69,7 @@ export function useTodos() {
         body: JSON.stringify({
           todo: text,
           completed: false,
-          userId: 1, // DummyJSON вимагає userId
+          userId: 1,
         }),
       });
 
@@ -71,5 +80,51 @@ export function useTodos() {
     }
   };
 
-  return { todos, isLoading, error, deleteTodo, toggleTodo, addTodo };
+  const editTodoTitle = async (id, newTitle) => {
+    try {
+      const response = await fetch(`https://dummyjson.com/todos/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ todo: newTitle }),
+      });
+
+      const data = await response.json();
+      setTodos((prev) =>
+        prev.map((t) => (t.id === id ? data : t))
+      );
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const filteredTodos = todos.filter((t) =>
+    t.todo.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const goToNextPage = () => {
+    if (currentPage * limitPerPage < totalTodos)
+      setCurrentPage((prev) => prev + 1);
+  };
+
+  const goToPrevPage = () => {
+    if (currentPage > 1) setCurrentPage((prev) => prev - 1);
+  };
+
+  return {
+    todos: filteredTodos,
+    isLoading,
+    error,
+    deleteTodo,
+    toggleTodo,
+    addTodo,
+    editTodoTitle,
+    searchTerm,
+    setSearchTerm,
+    currentPage,
+    goToNextPage,
+    goToPrevPage,
+    totalTodos,
+    limitPerPage,
+    setLimitPerPage,
+  };
 }
