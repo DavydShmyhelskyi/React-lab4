@@ -72,7 +72,10 @@
 2. Встановити залежності:  
 ```bash
 npm install
+```
 
 ---
 ## Посилання на сайт
+```
 https://react-lab4-mu.vercel.app/
+```
