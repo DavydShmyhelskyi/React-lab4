@@ -1,75 +1,28 @@
-import { useState, useCallback } from "react";
-import { useTodos } from "../hooks/useTodos";
 import TodoItem from "./TodoItem";
-import AddTodoForm from "./AddTodoForm";
+import React, { memo } from "react";
 
-export default function TodoList() {
-  const {
-    todos,
-    isLoading,
-    error,
-    deleteTodo,
-    toggleTodo,
-    addTodo,
-    editTodoTitle,
-    searchTerm,
-    setSearchTerm,
-    currentPage,
-    goToNextPage,
-    goToPrevPage,
-    totalTodos,
-    limitPerPage,
-    setLimitPerPage,
-  } = useTodos();
-
-  const [editingId, setEditingId] = useState(null);
-  const [newTitle, setNewTitle] = useState("");
-
-  // Мемоізовані колбеки
-  const startEdit = useCallback((todo) => {
-    setEditingId(todo.id);
-    setNewTitle(todo.todo);
-  }, []);
-
-  const saveEdit = useCallback(
-    (id) => {
-      if (!newTitle.trim()) return;
-      editTodoTitle(id, newTitle);
-      setEditingId(null);
-    },
-    [newTitle, editTodoTitle]
-  );
-
-  const handleAdd = useCallback(
-    (text) => {
-      addTodo(text);
-    },
-    [addTodo]
-  );
-
-  const handleDelete = useCallback(
-    (id) => {
-      deleteTodo(id);
-    },
-    [deleteTodo]
-  );
-
-  const handleToggle = useCallback(
-    (id) => {
-      toggleTodo(id);
-    },
-    [toggleTodo]
-  );
-
-  // Рендер
+const TodoList = memo(function TodoList({
+  isLoading,
+  error,
+  todoIds,
+  getTodoById,
+  onDelete,
+  onToggle,
+  onSave,
+  searchTerm,
+  setSearchTerm,
+  currentPage,
+  goToNextPage,
+  goToPrevPage,
+  totalTodos,
+  limitPerPage,
+  setLimitPerPage,
+}) {
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p style={{ color: "red" }}>{error}</p>;
 
   return (
-    <div className="app">
-      <h1>Todo List</h1>
-
-
+    <div>
       <input
         type="text"
         value={searchTerm}
@@ -78,46 +31,22 @@ export default function TodoList() {
         style={{ marginBottom: "15px", width: "100%", padding: "8px" }}
       />
 
-
-      <AddTodoForm onAdd={handleAdd} />
-
-
       <ul>
-        {todos.length === 0 && <p>No todos found.</p>}
-        {todos.map((todo) => (
-          <TodoItem
-            key={todo.id}
-            todo={todo}
-            onDelete={() => handleDelete(todo.id)}
-            onToggle={() => handleToggle(todo.id)}
-          >
-            {editingId === todo.id ? (
-              <>
-                <input
-                  type="text"
-                  value={newTitle}
-                  onChange={(e) => setNewTitle(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && saveEdit(todo.id)}
-                  autoFocus
-                />
-                <button onClick={() => saveEdit(todo.id)}>Save</button>
-                <button onClick={() => setEditingId(null)}>Cancel</button>
-              </>
-            ) : (
-              <>
-                <span
-                  className={todo.completed ? "completed" : ""}
-                  style={{ flex: 1 }}
-                >
-                  {todo.todo}
-                </span>
-                <button onClick={() => startEdit(todo)}>Edit</button>
-              </>
-            )}
-          </TodoItem>
-        ))}
+        {todoIds.length === 0 && <p>No todos found.</p>}
+        {todoIds.map((id) => {
+          const todo = getTodoById(id);
+          if (!todo) return null;
+          return (
+            <TodoItem
+              key={id}
+              todo={todo}
+              onToggle={onToggle}
+              onDelete={onDelete}
+              onSave={onSave}
+            />
+          );
+        })}
       </ul>
-
 
       <div
         style={{
@@ -140,7 +69,6 @@ export default function TodoList() {
         </button>
       </div>
 
-
       <div style={{ marginTop: "10px", textAlign: "center" }}>
         <label>
           Items per page:{" "}
@@ -156,4 +84,6 @@ export default function TodoList() {
       </div>
     </div>
   );
-}
+});
+
+export default TodoList;

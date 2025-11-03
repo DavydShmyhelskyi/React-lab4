@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 
 export function useTodos() {
   const [todos, setTodos] = useState([]);
@@ -10,7 +10,7 @@ export function useTodos() {
   const [limitPerPage, setLimitPerPage] = useState(10);
   const [totalTodos, setTotalTodos] = useState(0);
 
-  // Фетч + пагінація
+  // --- fetch ---
   useEffect(() => {
     setIsLoading(true);
     fetch(
@@ -30,95 +30,100 @@ export function useTodos() {
       });
   }, [currentPage, limitPerPage]);
 
-  const deleteTodo = async (id) => {
+  // --- CRUD with stable refs ---
+  const addTodo = useCallback(async (text) => {
     try {
-      await fetch(`https://dummyjson.com/todos/${id}`, { method: "DELETE" });
-      setTodos((prev) => prev.filter((todo) => todo.id !== id));
-    } catch (err) {
-      setError(err.message);
-    }
-  };
-
-  const toggleTodo = async (id) => {
-    try {
-      const todo = todos.find((t) => t.id === id);
-      const updated = { completed: !todo.completed };
-
-      await fetch(`https://dummyjson.com/todos/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updated),
-      });
-
-      setTodos((prev) =>
-        prev.map((t) =>
-          t.id === id ? { ...t, completed: !t.completed } : t
-        )
-      );
-    } catch (err) {
-      setError(err.message);
-    }
-  };
-
-  const addTodo = async (text) => {
-    try {
-      const response = await fetch("https://dummyjson.com/todos/add", {
+      const res = await fetch("https://dummyjson.com/todos/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          todo: text,
-          completed: false,
-          userId: 1,
-        }),
+        body: JSON.stringify({ todo: text, completed: false, userId: 1 }),
       });
-
-      const data = await response.json();
+      const data = await res.json();
       setTodos((prev) => [data, ...prev]);
     } catch (err) {
       setError(err.message);
     }
-  };
+  }, []);
 
-  const editTodoTitle = async (id, newTitle) => {
+  const deleteTodo = useCallback(async (id) => {
     try {
-      const response = await fetch(`https://dummyjson.com/todos/${id}`, {
+      await fetch(`https://dummyjson.com/todos/${id}`, { method: "DELETE" });
+      setTodos((prev) => prev.filter((t) => t.id !== id));
+    } catch (err) {
+      setError(err.message);
+    }
+  }, []);
+
+  const toggleTodo = useCallback(async (id) => {
+    setTodos((prev) => {
+      const i = prev.findIndex((t) => t.id === id);
+      if (i === -1) return prev;
+      const updated = { ...prev[i], completed: !prev[i].completed };
+      const copy = [...prev];
+      copy[i] = updated;
+      return copy;
+    });
+
+    try {
+      await fetch(`https://dummyjson.com/todos/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ completed: true }),
+      });
+    } catch (err) {
+      setError(err.message);
+    }
+  }, []);
+
+  const editTodoTitle = useCallback(async (id, newTitle) => {
+    setTodos((prev) => {
+      const i = prev.findIndex((t) => t.id === id);
+      if (i === -1) return prev;
+      const updated = { ...prev[i], todo: newTitle };
+      const copy = [...prev];
+      copy[i] = updated;
+      return copy;
+    });
+
+    try {
+      await fetch(`https://dummyjson.com/todos/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ todo: newTitle }),
       });
-
-      const data = await response.json();
-      setTodos((prev) =>
-        prev.map((t) => (t.id === id ? data : t))
-      );
     } catch (err) {
       setError(err.message);
     }
-  };
+  }, []);
 
-  // Мемоізація відфільтрованих todos
-  const filteredTodos = useMemo(() => {
-    return todos.filter((t) =>
-      t.todo.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+  // --- pagination + search ---
+  const filteredIds = useMemo(() => {
+    return todos
+      .filter((t) =>
+        t.todo.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+      .map((t) => t.id);
   }, [todos, searchTerm]);
 
-  const goToNextPage = () => {
-    if (currentPage * limitPerPage < totalTodos)
-      setCurrentPage((prev) => prev + 1);
-  };
+  const getTodoById = useCallback(
+    (id) => todos.find((t) => t.id === id),
+    [todos]
+  );
 
-  const goToPrevPage = () => {
-    if (currentPage > 1) setCurrentPage((prev) => prev - 1);
-  };
+  const goToNextPage = useCallback(() => {
+    setCurrentPage((p) => (p * limitPerPage < totalTodos ? p + 1 : p));
+  }, [limitPerPage, totalTodos]);
+
+  const goToPrevPage = useCallback(() => {
+    setCurrentPage((p) => (p > 1 ? p - 1 : p));
+  }, []);
 
   return {
-    todos: filteredTodos,
     isLoading,
     error,
+    addTodo,
     deleteTodo,
     toggleTodo,
-    addTodo,
     editTodoTitle,
     searchTerm,
     setSearchTerm,
@@ -128,5 +133,7 @@ export function useTodos() {
     totalTodos,
     limitPerPage,
     setLimitPerPage,
+    todoIds: filteredIds,
+    getTodoById,
   };
 }

@@ -1,25 +1,52 @@
-import React from "react";
+import React, { useState, memo, useCallback } from "react";
 
-const TodoItem = React.memo(function TodoItem({ todo, onDelete, onToggle, children }) {
+const TodoItem = memo(({ todo, onToggle, onDelete, onSave }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [title, setTitle] = useState(todo.todo);
+
+  const handleSave = useCallback(() => {
+    if (!title.trim()) return;
+    onSave(todo.id, title);
+    setIsEditing(false);
+  }, [title, onSave, todo.id]);
+
+  console.log("render", todo.id); // debug: має показуватись лише один ID при toggle
+
   return (
-    <li>
-      <div>
-        <input
-          type="checkbox"
-          checked={todo.completed}
-          onChange={onToggle}
-        />
-      </div>
+    <li style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+      <input
+        type="checkbox"
+        checked={todo.completed}
+        onChange={() => onToggle(todo.id)}
+      />
 
-      {children ? (
-        children
+      {isEditing ? (
+        <>
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSave()}
+            autoFocus
+          />
+          <button onClick={handleSave}>Save</button>
+          <button onClick={() => setIsEditing(false)}>Cancel</button>
+        </>
       ) : (
-        <span className={todo.completed ? "completed" : ""}>
-          {todo.todo}
-        </span>
+        <>
+          <span
+            style={{
+              textDecoration: todo.completed ? "line-through" : "none",
+              flex: 1,
+            }}
+          >
+            {todo.todo}
+          </span>
+          <button onClick={() => setIsEditing(true)}>Edit</button>
+        </>
       )}
 
-      <button onClick={onDelete}>Delete</button>
+      <button onClick={() => onDelete(todo.id)}>Delete</button>
     </li>
   );
 });
