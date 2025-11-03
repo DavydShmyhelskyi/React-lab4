@@ -1,17 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 export function useTodos() {
   const [todos, setTodos] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // нові стани
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [limitPerPage, setLimitPerPage] = useState(10);
   const [totalTodos, setTotalTodos] = useState(0);
 
-  // фетч + пагінація
+  // Фетч + пагінація
   useEffect(() => {
     setIsLoading(true);
     fetch(
@@ -97,9 +96,12 @@ export function useTodos() {
     }
   };
 
-  const filteredTodos = todos.filter((t) =>
-    t.todo.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Мемоізація відфільтрованих todos
+  const filteredTodos = useMemo(() => {
+    return todos.filter((t) =>
+      t.todo.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [todos, searchTerm]);
 
   const goToNextPage = () => {
     if (currentPage * limitPerPage < totalTodos)

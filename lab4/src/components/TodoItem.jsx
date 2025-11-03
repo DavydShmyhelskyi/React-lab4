@@ -1,11 +1,16 @@
-export default function TodoItem({ todo, onDelete, onToggle, children }) {
+import React from "react";
+
+const TodoItem = React.memo(function TodoItem({ todo, onDelete, onToggle, children }) {
   return (
     <li>
-<div><input
-        type="checkbox"
-        checked={todo.completed}
-        onChange={onToggle}
-      /></div>
+      <div>
+        <input
+          type="checkbox"
+          checked={todo.completed}
+          onChange={onToggle}
+        />
+      </div>
+
       {children ? (
         children
       ) : (
@@ -17,4 +22,6 @@ export default function TodoItem({ todo, onDelete, onToggle, children }) {
       <button onClick={onDelete}>Delete</button>
     </li>
   );
-}
+});
+
+export default TodoItem;

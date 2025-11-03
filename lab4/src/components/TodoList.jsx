@@ -1,7 +1,7 @@
+import { useState, useCallback } from "react";
 import { useTodos } from "../hooks/useTodos";
 import TodoItem from "./TodoItem";
 import AddTodoForm from "./AddTodoForm";
-import { useState } from "react";
 
 export default function TodoList() {
   const {
@@ -25,23 +25,50 @@ export default function TodoList() {
   const [editingId, setEditingId] = useState(null);
   const [newTitle, setNewTitle] = useState("");
 
-  const startEdit = (todo) => {
+  // Мемоізовані колбеки
+  const startEdit = useCallback((todo) => {
     setEditingId(todo.id);
     setNewTitle(todo.todo);
-  };
+  }, []);
 
-  const saveEdit = (id) => {
-    if (!newTitle.trim()) return;
-    editTodoTitle(id, newTitle);
-    setEditingId(null);
-  };
+  const saveEdit = useCallback(
+    (id) => {
+      if (!newTitle.trim()) return;
+      editTodoTitle(id, newTitle);
+      setEditingId(null);
+    },
+    [newTitle, editTodoTitle]
+  );
 
+  const handleAdd = useCallback(
+    (text) => {
+      addTodo(text);
+    },
+    [addTodo]
+  );
+
+  const handleDelete = useCallback(
+    (id) => {
+      deleteTodo(id);
+    },
+    [deleteTodo]
+  );
+
+  const handleToggle = useCallback(
+    (id) => {
+      toggleTodo(id);
+    },
+    [toggleTodo]
+  );
+
+  // Рендер
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p style={{ color: "red" }}>{error}</p>;
 
   return (
     <div className="app">
       <h1>Todo List</h1>
+
 
       <input
         type="text"
@@ -51,7 +78,9 @@ export default function TodoList() {
         style={{ marginBottom: "15px", width: "100%", padding: "8px" }}
       />
 
-      <AddTodoForm onAdd={addTodo} />
+
+      <AddTodoForm onAdd={handleAdd} />
+
 
       <ul>
         {todos.length === 0 && <p>No todos found.</p>}
@@ -59,8 +88,8 @@ export default function TodoList() {
           <TodoItem
             key={todo.id}
             todo={todo}
-            onDelete={() => deleteTodo(todo.id)}
-            onToggle={() => toggleTodo(todo.id)}
+            onDelete={() => handleDelete(todo.id)}
+            onToggle={() => handleToggle(todo.id)}
           >
             {editingId === todo.id ? (
               <>
@@ -89,7 +118,14 @@ export default function TodoList() {
         ))}
       </ul>
 
-      <div style={{ display: "flex", justifyContent: "space-between", marginTop: "15px" }}>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginTop: "15px",
+        }}
+      >
         <button onClick={goToPrevPage} disabled={currentPage === 1}>
           Previous
         </button>
@@ -103,6 +139,7 @@ export default function TodoList() {
           Next
         </button>
       </div>
+
 
       <div style={{ marginTop: "10px", textAlign: "center" }}>
         <label>
