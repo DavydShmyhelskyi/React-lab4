@@ -135,6 +135,85 @@ li button:hover {
   background: #b91c1c;
 }
 
+/* ===== Навігація та сторінки ===== */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  width: 100%;
+  display: flex;
+  justify-content: center; /* center inner content */
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.nav-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 40%;
+  padding: 10px 20px;
+  background: transparent;
+}
+
+/* ensure content doesn't sit under the fixed header */
+#root {
+  width: 40%;
+  padding-top: 80px;
+}
+
+.nav a {
+  text-decoration: none;
+  color: #111827;
+}
+
+.nav-brand {
+  font-weight: 700;
+  color: #111827;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-logo {
+  height: 28px;
+}
+
+.nav-right {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.nav-contact {
+  display: flex;
+  gap: 10px;
+  margin-left: 12px;
+}
+
+.nav-link {
+  padding: 6px 12px;
+  border-radius: 6px;
+  color: #2563eb;
+}
+
+.nav-link:hover {
+  background: rgba(37,99,235,0.08);
+}
+
+.home.container {
+  width: 40%;
+  margin: 40px auto;
+  padding: 20px;
+  background: #f9fafb;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
 /* ===== Темна тема ===== */
 @media (prefers-color-scheme: dark) {
   body {

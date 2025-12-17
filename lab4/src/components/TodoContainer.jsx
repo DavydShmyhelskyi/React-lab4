@@ -2,6 +2,7 @@ import { useTodos } from "../hooks/useTodos";
 import AddTodoForm from "./AddTodoForm";
 import TodoList from "./TodoList";
 import { useCallback } from "react";
+import { Container, Typography, Paper } from "@mui/material";
 
 export default function TodoContainer() {
   const {
@@ -32,28 +33,32 @@ export default function TodoContainer() {
   );
 
   return (
-    <div className="app">
-      <h1>Todo List</h1>
+    <Container sx={{ mt: 4, maxWidth: 700 }}>
+      <Paper sx={{ p: 3 }} elevation={2}>
+        <Typography variant="h5" gutterBottom>
+          Todo List
+        </Typography>
 
-      <AddTodoForm onAdd={handleAdd} />
+        <AddTodoForm onAdd={handleAdd} />
 
-      <TodoList
-        isLoading={isLoading}
-        error={error}
-        todoIds={todoIds}
-        getTodoById={getTodoById}
-        onDelete={handleDelete}
-        onToggle={handleToggle}
-        onSave={handleSave}
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        currentPage={currentPage}
-        goToNextPage={goToNextPage}
-        goToPrevPage={goToPrevPage}
-        totalTodos={totalTodos}
-        limitPerPage={limitPerPage}
-        setLimitPerPage={setLimitPerPage}
-      />
-    </div>
+        <TodoList
+          isLoading={isLoading}
+          error={error}
+          todoIds={todoIds}
+          getTodoById={getTodoById}
+          onDelete={handleDelete}
+          onToggle={handleToggle}
+          onSave={handleSave}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          currentPage={currentPage}
+          goToNextPage={goToNextPage}
+          goToPrevPage={goToPrevPage}
+          totalTodos={totalTodos}
+          limitPerPage={limitPerPage}
+          setLimitPerPage={setLimitPerPage}
+        />
+      </Paper>
+    </Container>
   );
 }
