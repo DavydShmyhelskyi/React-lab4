@@ -1,7 +1,9 @@
+/* eslint-disable react-refresh/only-export-components */
+
 import { createContext, useMemo, useState, useContext } from 'react';
 import { ThemeProvider as MuiThemeProvider, createTheme, CssBaseline } from '@mui/material';
 
-const ThemeContext = createContext();
+const ThemeContext = createContext(null);
 
 export function ThemeProvider({ children }) {
   const [mode, setMode] = useState('light');
@@ -13,9 +15,7 @@ export function ThemeProvider({ children }) {
   const theme = useMemo(
     () =>
       createTheme({
-        palette: {
-          mode,
-        },
+        palette: { mode },
       }),
     [mode]
   );
@@ -30,4 +30,10 @@ export function ThemeProvider({ children }) {
   );
 }
 
-export const useTheme = () => useContext(ThemeContext);
+export const useTheme = () => {
+  const ctx = useContext(ThemeContext);
+  if (!ctx) {
+    throw new Error("useTheme must be used inside ThemeProvider");
+  }
+  return ctx;
+};
