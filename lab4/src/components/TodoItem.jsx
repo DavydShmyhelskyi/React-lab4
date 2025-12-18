@@ -17,10 +17,11 @@ const TodoItem = memo(({ todo, onToggle, onDelete, onSave }) => {
 
   return (
     <ListItem divider>
-      <Checkbox checked={todo.completed} onChange={() => onToggle(todo.id)} />
+
 
       {isEditing ? (
         <Box sx={{ flex: 1, display: "flex", gap: 1 }}>
+          <Checkbox checked={todo.completed} onChange={() => onToggle(todo.id)} />
           <TextField
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -39,6 +40,7 @@ const TodoItem = memo(({ todo, onToggle, onDelete, onSave }) => {
       ) : (
         <>
           <Typography sx={{ textDecoration: todo.completed ? "line-through" : "none", flex: 1 }}>
+          <Checkbox checked={todo.completed} onChange={() => onToggle(todo.id)} />
             {todo.todo}
           </Typography>
           <ListItemSecondaryAction>

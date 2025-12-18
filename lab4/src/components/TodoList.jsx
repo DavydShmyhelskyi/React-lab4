@@ -50,7 +50,7 @@ const TodoList = memo(function TodoList({
           <Button onClick={goToNextPage} disabled={currentPage * limitPerPage >= totalTodos}>Next</Button>
         </ButtonGroup>
 
-        <Typography>Page {currentPage} | Total: {totalTodos}</Typography>
+        <Typography>Page {currentPage} </Typography>
 
         <FormControl size="small" sx={{ minWidth: 120 }}>
           <InputLabel id="items-per-page-label">Items</InputLabel>
