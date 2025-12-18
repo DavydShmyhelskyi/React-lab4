@@ -1,19 +1,10 @@
-import { Outlet, Link as RouterLink } from "react-router-dom";
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Button,
-  IconButton,
-  Box,
-  Container,
-} from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
+import { AppBar, Toolbar, Typography, Button, IconButton, Box, Container} from "@mui/material";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import { useTheme } from "../theme/ThemeProvider";
-import AppRoutes from "../routes/AppRoutes";
 
-export default function RootLayout() {
+export default function RootLayout({ children }) {
   const { mode, toggleTheme } = useTheme();
 
   return (
@@ -42,7 +33,7 @@ export default function RootLayout() {
 
       <Box component="main" sx={{ mt: 8 }}>
         <Container maxWidth="md">
-            <AppRoutes />
+            {children}
         </Container>
       </Box>
     </>

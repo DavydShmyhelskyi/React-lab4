@@ -1,5 +1,6 @@
 import { Box, Container, Typography, Grid, Avatar, Button, Paper } from "@mui/material";
 import { useCallback } from "react";
+import myPhoto from "./img/myPhoto.jpg";
 
 export default function Home() {
   const scrollToSection = useCallback((id) => {
@@ -55,7 +56,7 @@ export default function Home() {
           <Grid item xs={12} md={6}>
             <Avatar
             alt="My Photo"
-            src="../img/myPhoto.jpg"
+            src={myPhoto}
             sx={{ width: 160, height: 160, mx: "auto" }}
             />
 
