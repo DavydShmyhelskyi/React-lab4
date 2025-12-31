@@ -5,6 +5,9 @@ Getting started
 - Install deps: `npm install`
 - Run dev server: `npm run dev`
 
+Or 
+`https://react-lab4-mu.vercel.app/`
+
 Pages
 
 - `/` — Home / Portfolio landing
