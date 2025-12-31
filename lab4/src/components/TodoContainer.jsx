@@ -33,12 +33,15 @@ export default function TodoContainer() {
   );
 
   return (
+    
     <Container sx={{ mt: 4, maxWidth: 700 }}>
       <Paper sx={{ p: 3 }} elevation={2}>
         <Typography variant="h5" gutterBottom>
           Todo List
         </Typography>
-
+         <Typography variant="body2" sx={{ mt: 0.5 }}>
+          A simple React project to demonstrate hands-on frontend skills: routing, global state management, API data fetching, and basic performance optimizations.
+        </Typography>
         <AddTodoForm onAdd={handleAdd} />
 
         <TodoList

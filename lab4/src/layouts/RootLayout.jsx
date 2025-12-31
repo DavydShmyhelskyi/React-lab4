@@ -23,7 +23,7 @@ export default function RootLayout({ children }) {
           <Box>
             <Button component={RouterLink} to="/">Home</Button>
             <Button component={RouterLink} to="/todo-list">Todo</Button>
-            <Button component={RouterLink} to="/lab4">Lab 4</Button>
+            {/* <Button component={RouterLink} to="/lab4">Lab 4</Button> */}
             <IconButton onClick={toggleTheme}>
               {mode === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
             </IconButton>

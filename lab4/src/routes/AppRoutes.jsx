@@ -8,7 +8,7 @@ export default function AppRoutes() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/todo-list" element={<TodoContainer />} />
-      <Route path="/lab4" element={<Lab4 />} />
+      {/* <Route path="/lab4" element={<Lab4 />} /> */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

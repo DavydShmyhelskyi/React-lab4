@@ -47,9 +47,9 @@ export default function Home() {
             </Typography>
             <Typography variant="subtitle1">.NET developer • IT specialist</Typography>
             <Box sx={{ mt: 2 }}>
-              <Button variant="contained" sx={{ mr: 1 }} onClick={() => scrollToSection("About-Me")}>About me</Button>
-              <Button variant="contained" sx={{ mr: 1 }} onClick={() => scrollToSection("Portfolio")}>Portfolio</Button>
-              <Button variant="contained" sx={{ mr: 1 }} onClick={() => scrollToSection("Skills")}>Skills</Button>
+              <Button variant="contained" sx={{ mr: 1 }} onClick={() => scrollToSection("Hard Skills")}>Hard Skills</Button>
+              <Button variant="contained" sx={{ mr: 1 }} onClick={() => scrollToSection("Languages")}>Languages</Button>
+              <Button variant="contained" sx={{ mr: 1 }} onClick={() => scrollToSection("Soft Skills")}>Soft Skills</Button>
             </Box>
           </Grid>
 
@@ -79,24 +79,68 @@ export default function Home() {
           </Box>
         </Box>
 
-        <Box id="Skills" sx={{ mt: 4 }}>
-          <Typography variant="h6">Skills</Typography>
-          <Typography variant="body2" sx={{ mt: 1 }}>
-            C#, ASP.NET, EF, WPF, SQL Server, HTML/CSS, and basic Python/C++.
-          </Typography>
-        </Box>
+        <Box id="Hard Skills" sx={{ mt: 4 }}>
+  <Typography variant="h6">Hard Skills</Typography>
 
+  <Typography variant="subtitle2" sx={{ mt: 2 }}>
+    Backend
+  </Typography>
+  <Typography variant="body2" sx={{ mt: 0.5 }}>
+    C# / .NET, ASP.NET Core, Entity Framework Core, REST API, SQL (PostgreSQL).
+    Experience building RESTful APIs, working with relational databases,
+    designing application architecture, and handling data access using EF Core.
+    APIs tested and validated with Postman.
+  </Typography>
 
-        <Box id="Resume" sx={{ mt: 4 }}>
-          <Button variant="contained" component="a" href="https://drive.google.com/drive/folders/1SrpvIDIXBZ4m4foJVMRqEkE0507AaTFX?usp=sharing" target="_blank" rel="noreferrer">View CV (PDF)</Button>
-        </Box>
+  <Typography variant="subtitle2" sx={{ mt: 2 }}>
+    Frontend
+  </Typography>
+  <Typography variant="body2" sx={{ mt: 0.5 }}>
+    <strong>React:</strong> building UI components, managing state, and integrating
+    frontend applications with backend APIs.
+    <br />
+    <strong>Blazor:</strong> developing interactive web interfaces using C#,
+    enabling seamless frontend-backend integration within the .NET ecosystem.
+  </Typography>
 
-        <Box id="Blog" sx={{ mt: 4 }}>
-          <Typography variant="h6">Blog</Typography>
-          <Typography variant="body2" sx={{ mt: 1 }}>
-            Short bio and posts will appear here.
-          </Typography>
-        </Box>
+  <Typography variant="subtitle2" sx={{ mt: 2 }}>
+    AI & Productivity
+  </Typography>
+  <Typography variant="body2" sx={{ mt: 0.5 }}>
+    Practical use of AI tools and agents for debugging, code analysis,
+    refactoring, API design, and faster problem-solving during development.
+  </Typography>
+</Box>
+
+<Box id="Languages" sx={{ mt: 4 }}>
+  <Typography variant="h6">Languages</Typography>
+  <Typography variant="body2" sx={{ mt: 1 }}>
+    Ukrainian — Native<br />
+    English — Upper-Intermediate<br />
+    Polish — Elementary 
+  </Typography>
+</Box>
+
+<Box id="Resume" sx={{ mt: 4 }}>
+  <Button
+    variant="contained"
+    component="a"
+    href="https://drive.google.com/drive/folders/1SrpvIDIXBZ4m4foJVMRqEkE0507AaTFX?usp=sharing"
+    target="_blank"
+    rel="noreferrer"
+  >
+    View CV (PDF)
+  </Button>
+</Box>
+
+<Box id="Soft Skills" sx={{ mt: 4 }}>
+  <Typography variant="h6">Soft Skills</Typography>
+  <Typography variant="body2" sx={{ mt: 1 }}>
+    Attention to detail, strong problem-solving skills, clear communication,
+    teamwork mindset, diligence, and ability to learn new technologies quickly.
+  </Typography>
+</Box>
+
 
         <Box component="footer" sx={{ mt: 6, py: 3, textAlign: "center", bgcolor: "background.paper" }}>
           <Typography variant="body2">© 2024 All rights reserved</Typography>
