@@ -125,7 +125,7 @@ export default function Home() {
   <Button
     variant="contained"
     component="a"
-    href="https://drive.google.com/drive/folders/1SrpvIDIXBZ4m4foJVMRqEkE0507AaTFX?usp=sharing"
+    href="https://drive.google.com/file/d/1JeRMymfvO30xPKnvrfzC3t29kAfSKG9G/view?usp=drive_link"
     target="_blank"
     rel="noreferrer"
   >
