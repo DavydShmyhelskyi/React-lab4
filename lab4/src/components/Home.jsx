@@ -48,7 +48,6 @@ export default function Home() {
             <Typography variant="subtitle1">.NET developer • IT specialist</Typography>
             <Box sx={{ mt: 2 }}>
               <Button variant="contained" sx={{ mr: 1 }} onClick={() => scrollToSection("Hard Skills")}>Hard Skills</Button>
-              <Button variant="contained" sx={{ mr: 1 }} onClick={() => scrollToSection("Languages")}>Languages</Button>
               <Button variant="contained" sx={{ mr: 1 }} onClick={() => scrollToSection("Soft Skills")}>Soft Skills</Button>
             </Box>
           </Grid>
